@@ -195,7 +195,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                     resolve({ value: { recordDataBase64, mimeType, msDuration: recordingDuration * 1000, path } });
                 };
                 this.mediaRecorder.ondataavailable = (event) => this.chunks.push(event.data);
-                this.mediaRecorder.start();
+                this.mediaRecorder.start(1000);
             });
             return successResponse();
         }
