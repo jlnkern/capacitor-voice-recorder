@@ -251,6 +251,7 @@ export class VoiceRecorderImpl {
         }
       };
       
+      this.chunks = [];
       // Safari-specific handling: Request data more frequently to avoid chunk loss
       const timeslice = this.isSafariBrowser ? 1000 : undefined; // Request data every second in Safari
       this.mediaRecorder.start(timeslice);

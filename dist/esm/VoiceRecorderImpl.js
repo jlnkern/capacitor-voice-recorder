@@ -41,6 +41,7 @@ export class VoiceRecorderImpl {
         if (!havingPermission.value) {
             throw missingPermissionError();
         }
+        this.chunks = [];
         return navigator.mediaDevices
             .getUserMedia({ audio: true })
             .then((stream) => this.onSuccessfullyStartedRecording(stream, options))
@@ -223,6 +224,7 @@ export class VoiceRecorderImpl {
                     this.chunks = handleSafariChunk(event.data, this.chunks);
                 }
             };
+            this.chunks = [];
             // Safari-specific handling: Request data more frequently to avoid chunk loss
             const timeslice = this.isSafariBrowser ? 1000 : undefined; // Request data every second in Safari
             this.mediaRecorder.start(timeslice);
