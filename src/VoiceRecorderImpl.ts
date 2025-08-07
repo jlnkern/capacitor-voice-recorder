@@ -1,6 +1,4 @@
 import write_blob from 'capacitor-blob-writer';
-import getBlobDuration from 'get-blob-duration';
-
 import type {
   Base64String,
   CurrentRecordingStatus,
@@ -194,7 +192,8 @@ export class VoiceRecorderImpl {
           recordDataBase64 = await VoiceRecorderImpl.blobToBase64(blobVoiceRecording);
         }
 
-        const recordingDuration = await getBlobDuration(blobVoiceRecording);
+        // const recordingDuration = await getBlobDuration(blobVoiceRecording);
+        const recordingDuration = 1;
         this.prepareInstanceForNextOperation();
         resolve({ value: { recordDataBase64, mimeType, msDuration: recordingDuration * 1000, path } });
       };

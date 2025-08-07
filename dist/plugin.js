@@ -1,4 +1,4 @@
-var capacitorVoiceRecorder = (function (exports, core, write_blob, getBlobDuration) {
+var capacitorVoiceRecorder = (function (exports, core, write_blob) {
     'use strict';
 
     const RecordingStatus = {
@@ -189,7 +189,8 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob, getBlobDurati
                     else {
                         recordDataBase64 = await VoiceRecorderImpl.blobToBase64(blobVoiceRecording);
                     }
-                    const recordingDuration = await getBlobDuration(blobVoiceRecording);
+                    // const recordingDuration = await getBlobDuration(blobVoiceRecording);
+                    const recordingDuration = 1;
                     this.prepareInstanceForNextOperation();
                     resolve({ value: { recordDataBase64, mimeType, msDuration: recordingDuration * 1000, path } });
                 };
@@ -270,5 +271,5 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob, getBlobDurati
 
     return exports;
 
-})({}, capacitorExports, write_blob, getBlobDuration);
+})({}, capacitorExports, write_blob);
 //# sourceMappingURL=plugin.js.map

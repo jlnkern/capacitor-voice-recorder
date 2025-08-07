@@ -1,5 +1,4 @@
 import write_blob from 'capacitor-blob-writer';
-import getBlobDuration from 'get-blob-duration';
 import { RecordingStatus } from './definitions';
 import { alreadyRecordingError, couldNotQueryPermissionStatusError, deviceCannotVoiceRecordError, emptyRecordingError, failedToFetchRecordingError, failedToRecordError, failureResponse, missingPermissionError, recordingHasNotStartedError, successResponse, } from './predefined-web-responses';
 // these mime types will be checked one by one in order until one of them is found to be supported by the current browser
@@ -169,7 +168,8 @@ export class VoiceRecorderImpl {
                 else {
                     recordDataBase64 = await VoiceRecorderImpl.blobToBase64(blobVoiceRecording);
                 }
-                const recordingDuration = await getBlobDuration(blobVoiceRecording);
+                // const recordingDuration = await getBlobDuration(blobVoiceRecording);
+                const recordingDuration = 1;
                 this.prepareInstanceForNextOperation();
                 resolve({ value: { recordDataBase64, mimeType, msDuration: recordingDuration * 1000, path } });
             };
