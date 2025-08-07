@@ -59,7 +59,7 @@ export class VoiceRecorderImpl {
     if (!havingPermission.value) {
       throw missingPermissionError();
     }
-
+    this.chunks = [];
     return navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => this.onSuccessfullyStartedRecording(stream, options))
