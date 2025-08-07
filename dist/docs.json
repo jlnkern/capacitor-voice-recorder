@@ -140,9 +140,10 @@
           "tags": [],
           "docs": "",
           "complexTypes": [
-            "Base64String"
+            "Base64String",
+            "Blob"
           ],
-          "type": "{ recordDataBase64?: string | undefined; msDuration: number; mimeType: string; path?: string | undefined; }"
+          "type": "{ recordDataBase64?: string | undefined; blobVoiceRecording?: any; msDuration: number; mimeType: string; path?: string | undefined; }"
         }
       ]
     },
