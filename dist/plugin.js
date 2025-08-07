@@ -285,7 +285,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                     console.log('line 203');
                     this.prepareInstanceForNextOperation();
                     console.log('line 205');
-                    resolve({ value: { recordDataBase64, blobVoiceRecording, mimeType, msDuration: recordingDuration * 1000, path } });
+                    resolve({ value: { recordDataBase64, mimeType, msDuration: recordingDuration * 1000, path } });
                 };
                 this.mediaRecorder.ondataavailable = (event) => {
                     console.log('ondataavailable', event);
