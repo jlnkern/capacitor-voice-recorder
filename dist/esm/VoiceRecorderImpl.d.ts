@@ -10,7 +10,6 @@ export declare class VoiceRecorderImpl {
     private mediaRecorder;
     private chunks;
     private pendingResult;
-    private isSafariBrowser;
     private safariDataInterval;
     static canDeviceVoiceRecord(): Promise<GenericResponse>;
     startRecording(options?: RecordingOptions): Promise<GenericResponse>;
