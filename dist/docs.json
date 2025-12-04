@@ -258,7 +258,7 @@
           "complexTypes": []
         },
         {
-          "text": "{\r\n      directory: Directory;\r\n      subDirectory?: string;\r\n    }",
+          "text": "{\n      directory: Directory;\n      subDirectory?: string;\n    }",
           "complexTypes": [
             "Directory"
           ]
