@@ -1,6 +1,6 @@
 {
   "name": "@jlnkern/capacitor-voice-recorder",
-  "version": "7.1.2",
+  "version": "7.1.5",
   "description": "Capacitor plugin for voice recording",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorVoiceRecorder.podspec"
+    "JlnkernCapacitorVoiceRecorder.podspec"
   ],
   "author": {
     "name": "Avihu Harush",
