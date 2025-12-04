@@ -10,4 +10,5 @@ export declare class VoiceRecorderWeb extends WebPlugin implements VoiceRecorder
     pauseRecording(): Promise<GenericResponse>;
     resumeRecording(): Promise<GenericResponse>;
     getCurrentStatus(): Promise<CurrentRecordingStatus>;
+    getErrorMessage(): string | null;
 }

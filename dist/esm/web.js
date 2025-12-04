@@ -29,5 +29,8 @@ export class VoiceRecorderWeb extends WebPlugin {
     getCurrentStatus() {
         return this.voiceRecorderInstance.getCurrentStatus();
     }
+    getErrorMessage() {
+        return this.voiceRecorderInstance.getErrorMessage();
+    }
 }
 //# sourceMappingURL=web.js.map

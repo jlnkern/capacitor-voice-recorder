@@ -11,6 +11,7 @@ export declare class VoiceRecorderImpl {
     private chunks;
     private pendingResult;
     private safariDataInterval;
+    private errorMessage;
     static canDeviceVoiceRecord(): Promise<GenericResponse>;
     startRecording(options?: RecordingOptions): Promise<GenericResponse>;
     stopRecording(): Promise<RecordingData>;
@@ -24,5 +25,8 @@ export declare class VoiceRecorderImpl {
     private onFailedToStartRecording;
     private static blobToBase64;
     private prepareInstanceForNextOperation;
+    private addErrorMessage;
+    private resetErrorMessage;
+    getErrorMessage(): string | null;
 }
 export {};

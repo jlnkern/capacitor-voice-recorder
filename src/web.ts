@@ -43,4 +43,8 @@ export class VoiceRecorderWeb extends WebPlugin implements VoiceRecorderPlugin {
   public getCurrentStatus(): Promise<CurrentRecordingStatus> {
     return this.voiceRecorderInstance.getCurrentStatus();
   }
+
+  public getErrorMessage(): string | null {
+    return this.voiceRecorderInstance.getErrorMessage();
+  }
 }

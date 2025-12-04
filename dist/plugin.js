@@ -70,6 +70,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
             this.chunks = [];
             this.pendingResult = neverResolvingPromise();
             this.safariDataInterval = null;
+            this.errorMessage = null;
         }
         static async canDeviceVoiceRecord() {
             var _a;
@@ -81,6 +82,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
             }
         }
         async startRecording(options) {
+            this.resetErrorMessage();
             if (this.mediaRecorder != null) {
                 throw alreadyRecordingError();
             }
@@ -197,7 +199,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
             this.pendingResult = new Promise((resolve, reject) => {
                 this.mediaRecorder = new MediaRecorder(stream);
                 this.mediaRecorder.onerror = (event) => {
-                    console.error('MediaRecorder error:', event);
+                    this.addErrorMessage('MediaRecorder error:', event, true);
                     this.prepareInstanceForNextOperation();
                     reject(failedToRecordError());
                 };
@@ -210,7 +212,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                         await new Promise(resolve => setTimeout(resolve, 200));
                     }
                     catch (error) {
-                        console.warn('Final data request in onstop failed:', error);
+                        this.addErrorMessage('Final data request in onstop failed:', error, true);
                     }
                     const mimeType = VoiceRecorderImpl.getSupportedMimeType();
                     if (mimeType == null) {
@@ -219,7 +221,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                         return;
                     }
                     if (this.chunks.length === 0) {
-                        console.warn('No chunks available for recording');
+                        this.addErrorMessage('No chunks available for recording', true);
                         this.prepareInstanceForNextOperation();
                         reject(emptyRecordingError());
                         return;
@@ -275,7 +277,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                             this.mediaRecorder.requestData();
                         }
                         catch (error) {
-                            console.warn('Data request failed:', error);
+                            this.addErrorMessage('Data request failed:', error, true);
                         }
                     }
                 }, 2000); // Request data every 2 seconds as additional safety
@@ -305,7 +307,7 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
                     this.mediaRecorder.stop();
                 }
                 catch (error) {
-                    console.warn('While trying to stop a media recorder, an error was thrown', error);
+                    this.addErrorMessage('While trying to stop a media recorder, an error was thrown' + error.message, true);
                 }
             }
             // Clear data interval
@@ -316,6 +318,28 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
             this.pendingResult = neverResolvingPromise();
             this.mediaRecorder = null;
             // this.chunks = [];
+        }
+        addErrorMessage(message, error, isWarning = false) {
+            if (message == null) {
+                message = '';
+            }
+            if (error instanceof Error) {
+                message += ' ' + error.message;
+            }
+            if (isWarning) {
+                this.errorMessage += `[WARNING] ${message}`;
+                console.warn(message);
+            }
+            else {
+                this.errorMessage += `[ERROR] ${message}`;
+                console.error(message);
+            }
+        }
+        resetErrorMessage() {
+            this.errorMessage = null;
+        }
+        getErrorMessage() {
+            return this.errorMessage;
         }
     }
 
@@ -347,6 +371,9 @@ var capacitorVoiceRecorder = (function (exports, core, write_blob) {
         }
         getCurrentStatus() {
             return this.voiceRecorderInstance.getCurrentStatus();
+        }
+        getErrorMessage() {
+            return this.voiceRecorderInstance.getErrorMessage();
         }
     }
 

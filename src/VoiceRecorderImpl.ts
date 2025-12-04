@@ -38,6 +38,8 @@ export class VoiceRecorderImpl {
   private pendingResult: Promise<RecordingData> = neverResolvingPromise();
   private safariDataInterval: number | null = null;
 
+  private errorMessage: string | null = null;
+
   public static async canDeviceVoiceRecord(): Promise<GenericResponse> {
     if (navigator?.mediaDevices?.getUserMedia == null || VoiceRecorderImpl.getSupportedMimeType() == null) {
       return failureResponse();
@@ -47,6 +49,7 @@ export class VoiceRecorderImpl {
   }
 
   public async startRecording(options?: RecordingOptions): Promise<GenericResponse> {
+    this.resetErrorMessage();
     if (this.mediaRecorder != null) {
       throw alreadyRecordingError();
     }
@@ -169,7 +172,7 @@ export class VoiceRecorderImpl {
     this.pendingResult = new Promise((resolve, reject) => {
       this.mediaRecorder = new MediaRecorder(stream);
       this.mediaRecorder.onerror = (event) => {
-        console.error('MediaRecorder error:', event);
+        this.addErrorMessage('MediaRecorder error:', event, true);
         this.prepareInstanceForNextOperation();
         reject(failedToRecordError());
       };
@@ -180,7 +183,7 @@ export class VoiceRecorderImpl {
           this.mediaRecorder?.requestData();
           await new Promise(resolve => setTimeout(resolve, 200));
         } catch (error) {
-          console.warn('Final data request in onstop failed:', error);
+          this.addErrorMessage('Final data request in onstop failed:', error, true);
         }
         
         const mimeType = VoiceRecorderImpl.getSupportedMimeType();
@@ -191,7 +194,7 @@ export class VoiceRecorderImpl {
         }
         
         if (this.chunks.length === 0) {
-          console.warn('No chunks available for recording');
+          this.addErrorMessage('No chunks available for recording', true);
           this.prepareInstanceForNextOperation();
           reject(emptyRecordingError());
           return;
@@ -249,7 +252,7 @@ export class VoiceRecorderImpl {
           try {
             this.mediaRecorder.requestData();
           } catch (error) {
-            console.warn('Data request failed:', error);
+            this.addErrorMessage('Data request failed:', error, true);
           }
         }
       }, 2000); // Request data every 2 seconds as additional safety
@@ -282,7 +285,7 @@ export class VoiceRecorderImpl {
       try {
         this.mediaRecorder.stop();
       } catch (error) {
-        console.warn('While trying to stop a media recorder, an error was thrown', error);
+        this.addErrorMessage('While trying to stop a media recorder, an error was thrown' + (error as Error).message, true);
       }
     }
     
@@ -295,5 +298,29 @@ export class VoiceRecorderImpl {
     this.pendingResult = neverResolvingPromise();
     this.mediaRecorder = null;
     // this.chunks = [];
+  }
+
+  private addErrorMessage(message: string | null, error: Error | any | null, isWarning: boolean = false): void {
+    if (message == null) {
+      message = '';
+    }
+    if (error instanceof Error) {
+      message += ' ' + error.message;
+    }
+    if (isWarning) {
+      this.errorMessage += `[WARNING] ${message}`;
+      console.warn(message);
+    } else {
+      this.errorMessage += `[ERROR] ${message}`;
+      console.error(message);
+    }
+  }
+
+  private resetErrorMessage(): void {
+    this.errorMessage = null;
+  }
+
+  public getErrorMessage(): string | null {
+    return this.errorMessage;
   }
 }

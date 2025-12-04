@@ -107,6 +107,16 @@
           "CurrentRecordingStatus"
         ],
         "slug": "getcurrentstatus"
+      },
+      {
+        "name": "getErrorMessage",
+        "signature": "() => string | null",
+        "parameters": [],
+        "returns": "string | null",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "geterrormessage"
       }
     ],
     "properties": []
